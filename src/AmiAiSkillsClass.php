@@ -1,5 +1,5 @@
 <?php
 
-namespace AmiPraha\AmiAiSkills\AmiAiSkills;
+namespace AmiPraha\AmiAiSkills;
 
 class AmiAiSkillsClass {}

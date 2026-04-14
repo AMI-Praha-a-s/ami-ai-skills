@@ -1,6 +1,6 @@
 {
     "name": "ami-praha-a-s/ami-ai-skills",
-    "description": "Sada AI skillů",
+    "description": "Set of shared AI skills for every AI supported project.",
     "keywords": [
         "AMI-Praha-a-s",
         "ami-ai-skills"
@@ -15,26 +15,25 @@
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.2"
     },
     "require-dev": {
-        "pestphp/pest": "^4.0",
         "laravel/pint": "^1.0",
-        "spatie/ray": "^1.28"
+        "pestphp/pest": "^4.0"
     },
     "autoload": {
         "psr-4": {
-            "AmiPraha\AmiAiSkills\\AmiAiSkills\\": "src"
+            "AmiPraha\\AmiAiSkills\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AmiPraha\AmiAiSkills\\AmiAiSkills\\Tests\\": "tests"
+            "AmiPraha\\AmiAiSkills\\Tests\\": "tests"
         }
     },
     "scripts": {
         "test": "vendor/bin/pest",
-            "test-coverage": "vendor/bin/pest --coverage",
+        "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint"
     },
     "config": {

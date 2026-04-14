@@ -1,56 +1,62 @@
-# Sada AI skillů
+# AMI AI Skills
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ami-praha-a-s/ami-ai-skills.svg?style=flat-square)](https://packagist.org/packages/ami-praha-a-s/ami-ai-skills)
 [![Tests](https://img.shields.io/github/actions/workflow/status/ami-praha-a-s/ami-ai-skills/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ami-praha-a-s/ami-ai-skills/actions/workflows/run-tests.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/ami-praha-a-s/ami-ai-skills.svg?style=flat-square)](https://packagist.org/packages/ami-praha-a-s/ami-ai-skills)
 
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+A collection of AI skills for [Laravel Boost](https://github.com/laravel/boost). When installed in a Laravel project alongside Boost, these skills are automatically discovered and made available to AI coding agents (Claude Code, Cursor, Copilot, etc.).
 
-## Support us
+## Included Skills
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/ami-ai-skills.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/ami-ai-skills)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+| Skill | Description |
+|-------|-------------|
+| `create-ai-skill` | Teaches AI agents how to create new Laravel Boost AI skills with correct directory structure, frontmatter, and content patterns. |
+| `create-ai-guideline` | Teaches AI agents how to create new Laravel Boost AI guidelines with correct format, discovery mechanism, and best practices. |
 
 ## Installation
 
-You can install the package via composer:
+```bash
+composer require ami-praha-a-s/ami-ai-skills --dev
+```
+
+Then run Boost install (or update) to discover and activate the skills:
 
 ```bash
-composer require ami-praha-a-s/ami-ai-skills
+php artisan boost:install
 ```
 
-## Usage
+When prompted, select `ami-praha-a-s/ami-ai-skills` from the third-party packages list.
 
-```php
-$skeleton = new AmiPraha\AmiAiSkills\AmiAiSkills();
-echo $skeleton->echoPhrase('Hello, AmiPraha\AmiAiSkills!');
+## How It Works
+
+Laravel Boost uses convention-based discovery. This package places skill files at:
+
 ```
+resources/boost/skills/{skill-name}/SKILL.md
+```
+
+Boost scans all installed Composer packages for this directory structure and makes any discovered skills available during `boost:install` or `boost:update`. No ServiceProvider or PHP registration code is needed.
+
+## Adding New Skills
+
+To add a new skill to this package:
+
+1. Create a directory under `resources/boost/skills/` with a kebab-case name
+2. Add a `SKILL.md` file with YAML frontmatter (`name` and `description` required)
+3. Write the skill content in Markdown
+4. Run `composer test` to validate the skill format
+
+```
+resources/boost/skills/my-new-skill/
+  SKILL.md
+```
+
+The automated tests verify that all skills have valid frontmatter and correct structure.
 
 ## Testing
 
 ```bash
 composer test
 ```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [AMI Praha a.s.](https://github.com/AMI-Praha-a-s)
-- [All Contributors](../../contributors)
 
 ## License
 
