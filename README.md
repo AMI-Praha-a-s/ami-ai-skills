@@ -11,6 +11,7 @@ A collection of AI skills for [Laravel Boost](https://github.com/laravel/boost).
 |-------|-------------|
 | `create-ai-skill` | Teaches AI agents how to create new Laravel Boost AI skills with correct directory structure, frontmatter, and content patterns. |
 | `create-ai-guideline` | Teaches AI agents how to create new Laravel Boost AI guidelines with correct format, discovery mechanism, and best practices. |
+| `design-guide` | Manages the project's design guide -- creates it via codebase analysis and collaborative brainstorming if missing, consults it during frontend work, and keeps it updated as the design evolves. |
 
 ## Installation
 
