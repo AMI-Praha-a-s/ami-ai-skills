@@ -1,10 +1,11 @@
 {
-    "name": "ami-praha/ami-ai-skills",
+    "name": "ami-praha-a-s/ami-ai-skills",
     "description": "Set of shared AI skills for every AI supported project.",
     "keywords": [
         "AMI-Praha-a-s",
         "ami-ai-skills"
     ],
+    "homepage": "https://github.com/ami-praha-a-s/ami-ai-skills",
     "license": "MIT",
     "authors": [
         {
