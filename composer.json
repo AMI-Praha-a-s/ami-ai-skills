@@ -1,0 +1,49 @@
+{
+    "name": "ami-praha-a-s/ami-ai-skills",
+    "description": "Sada AI skillů",
+    "keywords": [
+        "AMI-Praha-a-s",
+        "ami-ai-skills"
+    ],
+    "homepage": "https://github.com/ami-praha-a-s/ami-ai-skills",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "AMI Praha a.s.",
+            "email": "info@ami.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0",
+        "laravel/pint": "^1.0",
+        "spatie/ray": "^1.28"
+    },
+    "autoload": {
+        "psr-4": {
+            "AmiPraha\AmiAiSkills\\AmiAiSkills\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AmiPraha\AmiAiSkills\\AmiAiSkills\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+            "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
