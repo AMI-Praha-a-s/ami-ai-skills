@@ -12,6 +12,9 @@ A collection of AI skills for [Laravel Boost](https://github.com/laravel/boost).
 | `create-ai-skill` | Teaches AI agents how to create new Laravel Boost AI skills with correct directory structure, frontmatter, and content patterns. |
 | `create-ai-guideline` | Teaches AI agents how to create new Laravel Boost AI guidelines with correct format, discovery mechanism, and best practices. |
 | `design-guide` | Manages the project's design guide -- creates it via codebase analysis and collaborative brainstorming if missing, consults it during frontend work, and keeps it updated as the design evolves. |
+| `ai-logger-get-log-entry` | Fetches a single ai-logger log entry by id from the local ai-logger API and presents its message, context and debug data. |
+| `grill-with-docs` | Interviews the user about a plan against the project's domain language and documented decisions, updating CONTEXT.md and ADRs inline. |
+| `ai-agent-git-hygiene` | Applies the AMI convention for AI-agent files in git -- commits the shared layer, ignores the personal layer, export-ignores every AI config path, and verifies by building a tarball. |
 
 ## Installation
 
