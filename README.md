@@ -1,7 +1,7 @@
 # AMI AI Skills
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ami-praha-a-s/ami-ai-skills.svg?style=flat-square)](https://packagist.org/packages/ami-praha-a-s/ami-ai-skills)
-[![Tests](https://img.shields.io/github/actions/workflow/status/ami-praha-a-s/ami-ai-skills/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ami-praha-a-s/ami-ai-skills/actions/workflows/run-tests.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/ami-praha-a-s/ami-ai-skills/run-tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/ami-praha-a-s/ami-ai-skills/actions/workflows/run-tests.yml)
 
 A collection of AI skills for [Laravel Boost](https://github.com/laravel/boost). When installed in a Laravel project alongside Boost, these skills are automatically discovered and made available to AI coding agents (Claude Code, Cursor, Copilot, etc.).
 
