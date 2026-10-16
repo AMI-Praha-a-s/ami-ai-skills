@@ -19,6 +19,9 @@ yarn-error.log
 /.fleet
 /.vscode
 
+# AI agents (personal layer)
+.destheraif/
+
 # Code sniffer
 .php_cs
 .php_cs.cache

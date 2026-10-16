@@ -10,3 +10,4 @@ AGENTS.override.md
 **/.codex/sessions/
 **/.codex/logs/
 .playwright-mcp/
+.destheraif/

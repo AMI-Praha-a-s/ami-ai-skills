@@ -69,6 +69,7 @@ personal_paths=(
   .codex/sessions/2026/session.jsonl
   .codex/logs/codex.log
   .playwright-mcp/trace.zip
+  .destheraif/config.json
 )
 
 failures=0

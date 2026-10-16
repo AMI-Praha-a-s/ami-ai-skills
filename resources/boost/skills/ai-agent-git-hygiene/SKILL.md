@@ -1,6 +1,6 @@
 ---
 name: ai-agent-git-hygiene
-description: "Use this skill when a project's .gitignore or .gitattributes needs AI-coding-agent rules -- Claude Code, Codex, OpenCode, Cursor, Laravel Boost, gem-team, Superset, design-sync, Playwright MCP. Triggers: 'ignore Claude files', 'should .mcp.json be committed', 'settings.local.json shows up in git status', 'CLAUDE.md is in our composer/GitLab tarball', 'port the AI ignore rules from <repo>', setting up a new AMI project, or auditing an existing one. Covers which AI paths are the shared (versioned) layer vs the personal (ignored) layer, the export-ignore set that keeps all AI config out of git archive, and how to verify by building a tarball. Do NOT use for general .gitignore hygiene unrelated to AI tooling, or for authoring the AI config files themselves (use create-ai-skill / create-ai-guideline)."
+description: "Use this skill when a project's .gitignore or .gitattributes needs AI-coding-agent rules -- Claude Code, Codex, OpenCode, Cursor, Laravel Boost, gem-team, Superset, design-sync, Playwright MCP, destheraif. Triggers: 'ignore Claude files', 'should .mcp.json be committed', 'settings.local.json shows up in git status', 'CLAUDE.md is in our composer/GitLab tarball', 'port the AI ignore rules from <repo>', setting up a new AMI project, or auditing an existing one. Covers which AI paths are the shared (versioned) layer vs the personal (ignored) layer, the export-ignore set that keeps all AI config out of git archive, and how to verify by building a tarball. Do NOT use for general .gitignore hygiene unrelated to AI tooling, or for authoring the AI config files themselves (use create-ai-skill / create-ai-guideline)."
 compatibility: "Requires a git working tree and the git + tar CLIs for the verification script."
 ---
 
@@ -15,7 +15,7 @@ This skill applies the AMI convention established in pcr-prestavby and ported to
 | Layer | Paths | Action |
 |-------|-------|--------|
 | Shared (commit) | `.agents/`, `.ai/`, `.cursor/`, `.claude/settings.json`, `.mcp.json`, `opencode.json`, `opencode.jsonc`, `tui.json`, `tui.jsonc`, `.codex/config.toml`, `AGENTS.md`, `CLAUDE.md`, `boost.json`, `.gem-team.yaml`, `.superset/`, `.design-sync/` (except its machine state) | Tracked, and `export-ignore`d |
-| Personal (ignore) | `**/.claude/settings.local.json`, `.claude/worktrees/`, `CLAUDE.local.md`, `AGENTS.override.md`, `**/.codex/auth.json`, `**/.codex/history.jsonl`, `**/.codex/sessions/`, `**/.codex/logs/`, `.playwright-mcp/` | `.gitignore`, and `export-ignore`d |
+| Personal (ignore) | `**/.claude/settings.local.json`, `.claude/worktrees/`, `CLAUDE.local.md`, `AGENTS.override.md`, `**/.codex/auth.json`, `**/.codex/history.jsonl`, `**/.codex/sessions/`, `**/.codex/logs/`, `.playwright-mcp/`, `.destheraif/` | `.gitignore`, and `export-ignore`d |
 | Personal, design-sync only | `/.ds-sync`, `/ds-bundle`, `/.design-sync/.cache`, `/.design-sync/learnings`, `/.design-sync/node_modules` | `.gitignore` in a separate block, only when `.design-sync/` exists |
 
 The shared/personal split follows the tools' own docs, not taste:
@@ -24,6 +24,7 @@ The shared/personal split follows the tools' own docs, not taste:
 - OpenCode: `opencode.json` "is also safe to be checked into Git." There is no `opencode.local.json`; that is an open upstream feature request.
 - The `.agents` protocol defines the project directory as "plain, version-controllable files" with `agents.md` marked "Commit to git for team config". The personal layer is the global `~/.agents/`, not the project one.
 - Codex: `AGENTS.override.md` is its documented local-override mechanism; `auth.json`, `history.jsonl`, `sessions/`, `logs/` are per-user state.
+- destheraif: `.destheraif/config.json` holds one developer's agent-runner commands (worktree setup, checks, format). It is not team config.
 
 ## Step-by-Step
 
@@ -77,6 +78,7 @@ AGENTS.override.md
 **/.codex/sessions/
 **/.codex/logs/
 .playwright-mcp/
+.destheraif/
 ```
 
 `.gitattributes`:
