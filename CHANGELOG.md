@@ -2,6 +2,25 @@
 
 All notable changes to `ami-ai-skills` will be documented in this file.
 
+## v0.0.5 - 2026-10-16
+
+### `ai-agent-git-hygiene`: `.destheraif/` joins the personal layer
+
+`.destheraif/config.json` holds one developer's agent-runner commands (worktree setup, checks, format). It is per-developer state, not team config, so it is now gitignored:
+
+- Added to the canonical `.gitignore` block (`assets/gitignore-block.txt` and the inline copy in `SKILL.md`) and to the personal-layer table.
+- `scripts/verify-ai-export.sh` now also checks that `.destheraif/config.json` is ignored by the repo's own `.gitignore`.
+- Like `.playwright-mcp/`, it is gitignored only. An ignored path is never tracked, so it needs no `export-ignore` line.
+
+Repos that already applied the block can append `.destheraif/` to their AI-agents `.gitignore` section.
+
+### Upgrade
+
+```bash
+composer update ami-praha-a-s/ami-ai-skills
+php artisan boost:update --discover
+
+```
 ## v0.0.4 - 2026-09-08
 
 ## New skill: `ai-agent-git-hygiene`
@@ -27,4 +46,5 @@ Ships with:
 ```bash
 composer update ami-praha-a-s/ami-ai-skills
 php artisan boost:update --discover
+
 ```
