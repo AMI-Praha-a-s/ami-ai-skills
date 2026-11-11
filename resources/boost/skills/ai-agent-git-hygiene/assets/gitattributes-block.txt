@@ -14,6 +14,10 @@
 .design-sync/** export-ignore
 .superset export-ignore
 .superset/** export-ignore
+.destherai export-ignore
+.destherai/** export-ignore
+.destheraif export-ignore
+.destheraif/** export-ignore
 .mcp.json export-ignore
 opencode.json export-ignore
 opencode.jsonc export-ignore

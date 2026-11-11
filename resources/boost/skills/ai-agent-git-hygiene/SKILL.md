@@ -1,6 +1,6 @@
 ---
 name: ai-agent-git-hygiene
-description: "Use this skill when a project's .gitignore or .gitattributes needs AI-coding-agent rules -- Claude Code, Codex, OpenCode, Cursor, Laravel Boost, gem-team, Superset, design-sync, Playwright MCP, destheraif. Triggers: 'ignore Claude files', 'should .mcp.json be committed', 'settings.local.json shows up in git status', 'CLAUDE.md is in our composer/GitLab tarball', 'port the AI ignore rules from <repo>', setting up a new AMI project, or auditing an existing one. Covers which AI paths are the shared (versioned) layer vs the personal (ignored) layer, the export-ignore set that keeps all AI config out of git archive, and how to verify by building a tarball. Do NOT use for general .gitignore hygiene unrelated to AI tooling, or for authoring the AI config files themselves (use create-ai-skill / create-ai-guideline)."
+description: "Use this skill when a project's .gitignore or .gitattributes needs AI-coding-agent rules -- Claude Code, Codex, OpenCode, Cursor, Laravel Boost, gem-team, Superset, design-sync, Playwright MCP, destherai, destheraif. Triggers: 'ignore Claude files', 'should .mcp.json be committed', 'settings.local.json shows up in git status', 'CLAUDE.md is in our composer/GitLab tarball', 'port the AI ignore rules from <repo>', setting up a new AMI project, or auditing an existing one. Covers which AI paths are the shared (versioned) layer vs the personal (ignored) layer, the export-ignore set that keeps all AI config out of git archive, and how to verify by building a tarball. Do NOT use for general .gitignore hygiene unrelated to AI tooling, or for authoring the AI config files themselves (use create-ai-skill / create-ai-guideline)."
 compatibility: "Requires a git working tree and the git + tar CLIs for the verification script."
 ---
 
@@ -15,7 +15,7 @@ This skill applies the AMI convention established in pcr-prestavby and ported to
 | Layer | Paths | Action |
 |-------|-------|--------|
 | Shared (commit) | `.agents/`, `.ai/`, `.cursor/`, `.claude/settings.json`, `.mcp.json`, `opencode.json`, `opencode.jsonc`, `tui.json`, `tui.jsonc`, `.codex/config.toml`, `AGENTS.md`, `CLAUDE.md`, `boost.json`, `.gem-team.yaml`, `.superset/`, `.design-sync/` (except its machine state) | Tracked, and `export-ignore`d |
-| Personal (ignore) | `**/.claude/settings.local.json`, `.claude/worktrees/`, `CLAUDE.local.md`, `AGENTS.override.md`, `**/.codex/auth.json`, `**/.codex/history.jsonl`, `**/.codex/sessions/`, `**/.codex/logs/`, `.playwright-mcp/`, `.destheraif/` | `.gitignore`, and `export-ignore`d |
+| Personal (ignore) | `**/.claude/settings.local.json`, `.claude/worktrees/`, `CLAUDE.local.md`, `AGENTS.override.md`, `**/.codex/auth.json`, `**/.codex/history.jsonl`, `**/.codex/sessions/`, `**/.codex/logs/`, `.playwright-mcp/`, `.destherai/`, `.destheraif/` | `.gitignore`, and `export-ignore`d |
 | Personal, design-sync only | `/.ds-sync`, `/ds-bundle`, `/.design-sync/.cache`, `/.design-sync/learnings`, `/.design-sync/node_modules` | `.gitignore` in a separate block, only when `.design-sync/` exists |
 
 The shared/personal split follows the tools' own docs, not taste:
@@ -24,21 +24,23 @@ The shared/personal split follows the tools' own docs, not taste:
 - OpenCode: `opencode.json` "is also safe to be checked into Git." There is no `opencode.local.json`; that is an open upstream feature request.
 - The `.agents` protocol defines the project directory as "plain, version-controllable files" with `agents.md` marked "Commit to git for team config". The personal layer is the global `~/.agents/`, not the project one.
 - Codex: `AGENTS.override.md` is its documented local-override mechanism; `auth.json`, `history.jsonl`, `sessions/`, `logs/` are per-user state.
-- destheraif: `.destheraif/config.json` holds one developer's agent-runner commands (worktree setup, checks, format). It is not team config.
+- destherai / destheraif: `.destherai/` and `.destheraif/` hold one developer's agent-runner config (a `config.json` with worktree setup, run, checks and format commands, sometimes helper scripts). It is not team config. Some repos committed `.destherai/` before this convention (pcr-prestavby, adpcr-web, custody-shield, fis-skladovky), so both folders are also `export-ignore`d: copies that are still tracked stay out of the archive until they are untracked.
 
 ## Step-by-Step
 
 1. **Inventory what the repo does today.** Run from the repo root:
 
    ```bash
-   git ls-files | grep -E '(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset)/|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|CLAUDE\.md|boost\.json|\.gem-team\.yaml)$'
-   git status --porcelain --ignored | grep -E '\.(claude|codex|agents|ai|cursor|opencode)|CLAUDE|AGENTS|mcp|opencode|boost'
-   grep -nE 'agents|claude|codex|cursor|opencode|mcp|AGENTS|CLAUDE|boost' .gitignore .gitattributes
+   git ls-files | grep -E '(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset|\.destheraif?)/|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|CLAUDE\.md|boost\.json|\.gem-team\.yaml)$'
+   git status --porcelain --ignored | grep -E '\.(claude|codex|agents|ai|cursor|opencode)|CLAUDE|AGENTS|mcp|opencode|boost|destherai'
+   grep -nE 'agents|claude|codex|cursor|opencode|mcp|AGENTS|CLAUDE|boost|destherai' .gitignore .gitattributes
    ```
 
    For every AI line already in `.gitignore`, run `git log -S'<line>' --oneline -- .gitignore` before trusting it. In pcr-prestavby the lines `/.mcp.json`, `/.agents`, `/opencode.json` had been added incidentally in a Vite migration commit and then copied to sibling repos as if they were a convention.
 
 2. **Fix inverted rules.** If `.gitignore` ignores a shared-layer path, delete that line. If the now-unignored file exists and holds no secrets (an `mcp_config.json` with bare command names is fine; anything with a token is not), `git add` it. If it holds a secret, stop and tell the user -- that file needs to move to the personal layer or use env-var references.
+
+   The reverse case: a personal-layer path that is tracked. `.destherai/` is committed in pcr-prestavby, adpcr-web, custody-shield and fis-skladovky. Its ignore line does not untrack it, and the verify script then fails with "tracked file(s) now match an ignore rule". Do not untrack it on your own. Ask the user and say what untracking does: `git rm -r --cached <path>` keeps the files in this clone, but once that commit is pulled, git deletes them from every other clone, including the user's own checkouts on other machines. Untrack only after they agree. If they decline, leave the files tracked (the `export-ignore` lines still keep them out of the archive) and report that check as failing.
 
 3. **Append the `.gitignore` block** from [assets/gitignore-block.txt](assets/gitignore-block.txt) verbatim, including its three comment lines, after the editor/IDE block. If the repo has `.design-sync/`, keep its machine-state paths in their own commented block below, as automotive-api does.
 
@@ -55,7 +57,7 @@ The shared/personal split follows the tools' own docs, not taste:
    bash {path-to-this-skill}/scripts/verify-ai-export.sh
    ```
 
-   It exits 0 only when the archive built from the index has zero AI paths, `app/` (or `src/`) kept every entry, every personal path resolves to this repo's `.gitignore`, and no tracked file became ignored. Fix and re-run until it passes.
+   It exits 0 only when the archive built from the index has zero AI paths, `app/` (or `src/`) kept every entry, every personal path resolves to this repo's `.gitignore`, and no tracked file became ignored. Fix and re-run until it passes. If the failure is a tracked personal-layer path, do not untrack it yourself; follow the reverse-case note in step 2 and ask first.
 
 7. **Commit with the evidence.** The commit message states which repo/commit it mirrors, lists the personal paths added and why they were unprotected before, lists extras beyond the canonical set with the reason, and pastes the verification numbers (archive entries before/after, AI entries before/after, `app/` entries kept). Example: "0 AI paths in the tarball (319 of 717 entries before), all 92 app/ paths still exported, git check-ignore resolves every personal path to this .gitignore, and no tracked file became ignored."
 
@@ -78,6 +80,7 @@ AGENTS.override.md
 **/.codex/sessions/
 **/.codex/logs/
 .playwright-mcp/
+.destherai/
 .destheraif/
 ```
 
@@ -100,6 +103,10 @@ AGENTS.override.md
 .design-sync/** export-ignore
 .superset export-ignore
 .superset/** export-ignore
+.destherai export-ignore
+.destherai/** export-ignore
+.destheraif export-ignore
+.destheraif/** export-ignore
 .mcp.json export-ignore
 opencode.json export-ignore
 opencode.jsonc export-ignore
@@ -130,7 +137,7 @@ boost.json export-ignore
 
 After staging both files, run `scripts/verify-ai-export.sh` (see step 6). Its manual equivalents, if the script is unavailable:
 
-1. `git archive $(git write-tree) | tar -t | grep -E '(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset)(/|$)|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|AGENTS\.override\.md|CLAUDE\.md|CLAUDE\.local\.md|\.gem-team\.yaml|boost\.json)$'` prints nothing.
+1. `git archive $(git write-tree) | tar -t | grep -E '(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset|\.destheraif?)(/|$)|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|AGENTS\.override\.md|CLAUDE\.md|CLAUDE\.local\.md|\.gem-team\.yaml|boost\.json)$'` prints nothing.
 2. `git archive HEAD | tar -t | grep -c '^app/'` equals the same count on `$(git write-tree)`; total entry counts before and after are reported in the commit message.
 3. `git check-ignore -v --no-index .claude/settings.local.json CLAUDE.local.md AGENTS.override.md .codex/auth.json` reports `.gitignore:<line>` for each, not a `$HOME` path.
 4. `git ls-files -ci --exclude-standard` prints nothing.

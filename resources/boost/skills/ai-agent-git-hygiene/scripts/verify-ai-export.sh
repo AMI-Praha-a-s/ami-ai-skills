@@ -53,7 +53,7 @@ warn() { printf '[verify-ai-export] %s\n' "$*" >&2; }
 
 # Single source of truth for what counts as an AI-agent path. Mirrors
 # ../assets/gitattributes-block.txt. Directories at any depth, files at any depth.
-ai_regex='(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset)(/|$)|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|AGENTS\.override\.md|CLAUDE\.md|CLAUDE\.local\.md|\.gem-team\.yaml|boost\.json)$'
+ai_regex='(^|/)(\.agents|\.ai|\.claude|\.codex|\.cursor|\.opencode|\.design-sync|\.superset|\.destheraif?)(/|$)|(^|/)(\.mcp\.json|opencode\.jsonc?|tui\.jsonc?|AGENTS\.md|AGENTS\.override\.md|CLAUDE\.md|CLAUDE\.local\.md|\.gem-team\.yaml|boost\.json)$'
 
 # Canonical personal-layer paths. Mirrors ../assets/gitignore-block.txt.
 # Directory rules are probed with a file inside them, at root and nested.
@@ -69,6 +69,7 @@ personal_paths=(
   .codex/sessions/2026/session.jsonl
   .codex/logs/codex.log
   .playwright-mcp/trace.zip
+  .destherai/config.json
   .destheraif/config.json
 )
 
@@ -152,6 +153,9 @@ done
 if newly_ignored="$(git ls-files -ci --exclude-standard)" && [ -n "$newly_ignored" ]; then
   fail "tracked file(s) now match an ignore rule:"
   printf '%s\n' "$newly_ignored" | sed 's/^/        /'
+  echo "      If these are personal-layer files, ask the user before 'git rm -r --cached <path>':"
+  echo "      it keeps them here, but pulling that commit deletes them from every other clone."
+  echo "      Otherwise an ignore rule is too broad; narrow it."
 else
   ok "no tracked file is matched by an ignore rule"
 fi
